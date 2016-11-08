@@ -1,8 +1,8 @@
 # Exploring OpenGL 2 and OpenGL ES
 For running building UI on WebGL (OpenGL ES) as well as 'embedded' Linux using SDL + OpenGL 2.
-OepnGL 3 is a departure from previous versions, including WebGL, so we'll focus on the older GL.
+OpenGL 3 is a departure from previous versions, including WebGL, so we'll focus on the older GL.
 
-##Instructions
+##Setup Instructions
 ###OSX
 * Download SDL development libraries: [https://www.libsdl.org/download-2.0.php#source](https://www.libsdl.org/download-2.0.php#source)
 * Copy SDL2.framework to /Library/Frameworks
@@ -11,3 +11,8 @@ OepnGL 3 is a departure from previous versions, including WebGL, so we'll focus 
 
 ###Linux
 * `apt-get install libsdl2-dev`
+
+##Dev Instrucitons
+* Modify app.cpp
+* `make`
+* `./app`
