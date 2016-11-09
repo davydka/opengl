@@ -42,6 +42,9 @@ SDL_GLContext gContext;
 //Render flag
 bool gRenderQuad = true;
 
+float colorRed = 0.0;
+
+
 
 
 //Starts up SDL, creates window, and initializes OpenGL
@@ -58,12 +61,18 @@ bool init()
 	}
 	else
 	{
+		// List of SDL GL Attributes:
+		// https://wiki.libsdl.org/SDL_GLattr
+
 		//Use OpenGL 2.1
 		SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
 		SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
 
+		//Force hardware acceleration
+		//SDL_GL_SetAttribute( SDL_GL_ACCELERATED_VISUAL, 1 );
+
 		//Create window
-		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED,
+		gWindow = SDL_CreateWindow( "take over the world", SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
 			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
 		if( gWindow == NULL )
@@ -163,6 +172,14 @@ void update()
 //Renders quad to the screen
 void render()
 {
+	/*
+	colorRed = colorRed + 0.1;
+	if(colorRed > 1.0)
+		colorRed = 0.0;
+
+	glClearColor( colorRed, 0.f, 0.f, 1.f );
+	*/
+
 	//Clear color buffer
 	glClear( GL_COLOR_BUFFER_BIT );
 
@@ -170,12 +187,15 @@ void render()
 	if( gRenderQuad )
 	{
 		glBegin( GL_QUADS );
-		glVertex2f( -0.5f, -0.5f );
-		glVertex2f( 0.5f, -0.5f );
-		glVertex2f( 0.5f, 0.5f );
-		glVertex2f( -0.5f, 0.5f );
+		glColor3f( 1.f, 0.f, 0.f ); glVertex2f( -0.5f, -0.5f );
+		glColor3f( 1.f, 1.f, 0.f ); glVertex2f( 0.5f, -0.5f );
+		glColor3f( 0.f, 1.f, 0.f ); glVertex2f( 0.5f, 0.5f );
+		glColor3f( 0.f, 0.f, 1.f ); glVertex2f( -0.5f, 0.5f );
 		glEnd();
 	}
+
+	//Update screen
+	SDL_GL_SwapWindow( gWindow );
 }
 
 //Frees media and shuts down SDL
@@ -230,9 +250,6 @@ int main( int argc, char* args[] )
 
 			//Render quad
 			render();
-			
-			//Update screen
-			SDL_GL_SwapWindow( gWindow );
 		}
 		
 		//Disable text input
