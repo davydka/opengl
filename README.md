@@ -17,12 +17,3 @@ OpenGL 3 is a departure from previous versions, including WebGL, so we'll focus 
 * `make`
 * `./app`
 
-##Modern
-```
-git clone https://github.com/nigels-com/glew.git glew
-cd glew/auto
-make
-cd ..
-sudo make install
-make clean
-```

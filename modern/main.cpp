@@ -36,8 +36,10 @@ void render();
 void close();
 
 //Shader loading utility programs
-void printProgramLog( GLuint program );
-void printShaderLog( GLuint shader );
+void printProgramLog( unsigned int );
+void printShaderLog( unsigned int );
+//void printProgramLog( GLuint program );
+//void printShaderLog( GLuint shader );
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
@@ -71,6 +73,7 @@ bool init()
 		//Use OpenGL 2.1
 		SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
 		SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
+		SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
 
 		/*
 		//Use OpenGL 3.1 core
@@ -159,12 +162,10 @@ bool initGL()
 		printShaderLog( vertexShader );
 		success = false;
 	}
-	/*
 	else
 	{
 		//Attach vertex shader to program
 		glAttachShader( gProgramID, vertexShader );
-
 
 		//Create fragment shader
 		GLuint fragmentShader = glCreateShader( GL_FRAGMENT_SHADER );
@@ -248,10 +249,145 @@ bool initGL()
 		}
 	}
 	
-	*/
 	return success;
 }
 
+void handleKeys( unsigned char key, int x, int y )
+{
+	//Toggle quad
+	if( key == 'q' )
+	{
+		gRenderQuad = !gRenderQuad;
+	}
+}
+
+void update()
+{
+	//No per frame update needed
+}
+
+void render()
+{
+	//Clear color buffer
+	glClear( GL_COLOR_BUFFER_BIT );
+	
+	//Render quad
+	if( gRenderQuad )
+	{
+		//Bind program
+		glUseProgram( gProgramID );
+
+		//Enable vertex position
+		glEnableVertexAttribArray( gVertexPos2DLocation );
+
+		//Set vertex data
+		glBindBuffer( GL_ARRAY_BUFFER, gVBO );
+		glVertexAttribPointer( gVertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL );
+
+		//Set index data and render
+		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, gIBO );
+		glDrawElements( GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL );
+
+		//Disable vertex position
+		glDisableVertexAttribArray( gVertexPos2DLocation );
+
+		//Unbind program
+		glUseProgram( NULL );
+	}
+}
+
+void close()
+{
+	//Deallocate program
+	glDeleteProgram( gProgramID );
+
+	//Destroy window	
+	SDL_DestroyWindow( gWindow );
+	gWindow = NULL;
+
+	//Quit SDL subsystems
+	SDL_Quit();
+}
+
+void printProgramLog(unsigned int program)
+{
+	char log[1000];
+	glGetProgramInfoLog(program, 1000, NULL, log);
+	printf( "Program log" );
+}
+
+void printShaderLog(unsigned int shader)
+{
+	char log[1000];
+	glGetShaderInfoLog(shader, 1000, NULL, log);
+	printf( "Shader log" );
+}
+/*
+void printProgramLog( GLuint program )
+{
+	//Make sure name is shader
+	if( glIsProgram( program ) )
+	{
+		//Program log length
+		int infoLogLength = 0;
+		int maxLength = infoLogLength;
+		
+		//Get info string length
+		glGetProgramiv( program, GL_INFO_LOG_LENGTH, &maxLength );
+		
+		//Allocate string
+		char* infoLog = new char[ maxLength ];
+		
+		//Get info log
+		glGetProgramInfoLog( program, maxLength, &infoLogLength, infoLog );
+		if( infoLogLength > 0 )
+		{
+			//Print Log
+			printf( "%s\n", infoLog );
+		}
+		
+		//Deallocate string
+		delete[] infoLog;
+	}
+	else
+	{
+		printf( "Name %d is not a program\n", program );
+	}
+}
+*/
+/*
+void printShaderLog( GLuint shader )
+{
+	//Make sure name is shader
+	if( glIsShader( shader ) )
+	{
+		//Shader log length
+		int infoLogLength = 0;
+		int maxLength = infoLogLength;
+		
+		//Get info string length
+		glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &maxLength );
+		
+		//Allocate string
+		char* infoLog = new char[ maxLength ];
+		
+		//Get info log
+		glGetShaderInfoLog( shader, maxLength, &infoLogLength, infoLog );
+		if( infoLogLength > 0 )
+		{
+			//Print Log
+			printf( "%s\n", infoLog );
+		}
+
+		//Deallocate string
+		delete[] infoLog;
+	}
+	else
+	{
+		printf( "Name %d is not a shader\n", shader );
+	}
+}
+*/
 int main( int argc, char* args[] )
 {
 	//Start up SDL and create window
@@ -259,6 +395,50 @@ int main( int argc, char* args[] )
 	{
 		printf( "Failed to initialize!\n" );
 	}
+	else
+	{
+		//Main loop flag
+		bool quit = false;
+
+		//Event handler
+		SDL_Event e;
+		
+		//Enable text input
+		SDL_StartTextInput();
+
+		//While application is running
+		while( !quit )
+		{
+			//Handle events on queue
+			while( SDL_PollEvent( &e ) != 0 )
+			{
+				//User requests quit
+				if( e.type == SDL_QUIT )
+				{
+					quit = true;
+				}
+				//Handle keypress with current mouse position
+				else if( e.type == SDL_TEXTINPUT )
+				{
+					int x = 0, y = 0;
+					SDL_GetMouseState( &x, &y );
+					handleKeys( e.text.text[ 0 ], x, y );
+				}
+			}
+
+			//Render quad
+			render();
+			
+			//Update screen
+			SDL_GL_SwapWindow( gWindow );
+		}
+		
+		//Disable text input
+		SDL_StopTextInput();
+	}
+
+	//Free resources and close SDL
+	close();
 
 	return 0;
 }
