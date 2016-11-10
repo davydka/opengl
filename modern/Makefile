@@ -19,7 +19,7 @@ LINKER_FLAGS = -lSDL2
 
 OS := $(shell uname)
 ifeq "$(OS)" "Darwin"
-LINKER_FLAGS = -lSDL2 -framework OpenGL
+LINKER_FLAGS = -lSDL2 -framework OpenGL -lGLEW 
 endif
 
 #OBJ_NAME specifies the name of our exectuable
