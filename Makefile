@@ -6,8 +6,8 @@
 OBJS = main.cpp
 
 #CC specifies which compiler we're using
-#CC = g++
-CC = clang
+CC = g++
+#CC = clang
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
@@ -15,7 +15,7 @@ CC = clang
 #COMPILER_FLAGS = -v
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lSDL2
+LINKER_FLAGS = -lSDL2 -lGLU -lGL
 
 OS := $(shell uname)
 ifeq "$(OS)" "Darwin"

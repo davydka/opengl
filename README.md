@@ -9,8 +9,9 @@ OpenGL 3 is a departure from previous versions, including WebGL, so we'll focus 
 * The framework may need to be resigned. `cd /Library/Frameworks/SDL2.framework/; codesign -f -s - SDL2;`
 * This might also work but is untested: `brew install sdl2`
 
-###Linux
-* `apt-get install libsdl2-dev`
+###Raspberry Pi
+* https://solarianprogrammer.com/2015/01/22/raspberry-pi-raspbian-getting-started-sdl-2/
+* `g++ main.cpp -o app `sdl2-config --cflags --libs` -lSDL2 -lGLU -lGL`
 
 ##Dev Instrucitons
 * Modify app.cpp
