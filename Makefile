@@ -3,7 +3,8 @@
 #and may not be redistributed without written permission.
 
 #OBJS specifies which files to compile as part of the project
-OBJS = main.cpp
+OBJS = main2.cpp
+#OBJS = 01_hello_SDL.cpp
 
 #CC specifies which compiler we're using
 CC = g++
@@ -15,7 +16,7 @@ CC = g++
 #COMPILER_FLAGS = -v
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lSDL2 -lGLU -lGL
+LINKER_FLAGS = `sdl2-config --cflags --libs` -lSDL2 -lGLU -lGL
 
 OS := $(shell uname)
 ifeq "$(OS)" "Darwin"
