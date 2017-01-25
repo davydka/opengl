@@ -10,8 +10,7 @@ OpenGL 3 is a departure from previous versions, including WebGL, so we'll focus 
 * This might also work but is untested: `brew install sdl2`
 
 ###Raspberry Pi
-* https://solarianprogrammer.com/2015/01/22/raspberry-pi-raspbian-getting-started-sdl-2/
-* `g++ main.cpp -o app `sdl2-config --cflags --libs` -lSDL2 -lGLU -lGL`
+* TBD
 
 ##Dev Instrucitons
 * Modify app.cpp

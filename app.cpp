@@ -1,19 +1,16 @@
+/*This source code copyrighted by Lazy Foo' Productions (2004-2015)
+and may not be redistributed without written permission.*/
+
 //Using SDL, SDL OpenGL, standard IO, and, strings
-#ifdef __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
-#include <OpenGL/glu.h>
-#else
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include <GL/GLU.h>
-#endif
+#include <GL/glu.h>
 #include <stdio.h>
 #include <string>
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+int SCREEN_WIDTH = 640;
+int SCREEN_HEIGHT = 480;
 
 //Starts up SDL, creates window, and initializes OpenGL
 bool init();
@@ -42,9 +39,6 @@ SDL_GLContext gContext;
 //Render flag
 bool gRenderQuad = true;
 
-
-
-//Starts up SDL, creates window, and initializes OpenGL
 bool init()
 {
 	//Initialization flag
@@ -62,10 +56,16 @@ bool init()
 		SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
 		SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
 
+SDL_DisplayMode current;
+SDL_GetCurrentDisplayMode(0, &current);
+SDL_Log("Display #%d: current display mode is %dx%dpx @ %dhz.", 0, current.w, current.h, current.refresh_rate);
+SCREEN_WIDTH = current.w;
+SCREEN_HEIGHT = current.h;
+SDL_ShowCursor(SDL_DISABLE);
+
+
 		//Create window
-		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
-			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN );
 		if( gWindow == NULL )
 		{
 			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -101,7 +101,6 @@ bool init()
 	return success;
 }
 
-//Initializes matrices and clear color
 bool initGL()
 {
 	bool success = true;
@@ -110,7 +109,7 @@ bool initGL()
 	//Initialize Projection Matrix
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
-
+	
 	//Check for error
 	error = glGetError();
 	if( error != GL_NO_ERROR )
@@ -130,9 +129,10 @@ bool initGL()
 		printf( "Error initializing OpenGL! %s\n", gluErrorString( error ) );
 		success = false;
 	}
+	
 	//Initialize clear color
 	glClearColor( 0.f, 0.f, 0.f, 1.f );
-
+	
 	//Check for error
 	error = glGetError();
 	if( error != GL_NO_ERROR )
@@ -140,11 +140,10 @@ bool initGL()
 		printf( "Error initializing OpenGL! %s\n", gluErrorString( error ) );
 		success = false;
 	}
-
+	
 	return success;
 }
 
-//Input handler
 void handleKeys( unsigned char key, int x, int y )
 {
 	//Toggle quad
@@ -154,31 +153,29 @@ void handleKeys( unsigned char key, int x, int y )
 	}
 }
 
-//Per frame update
 void update()
 {
 	//No per frame update needed
 }
 
-//Renders quad to the screen
 void render()
 {
 	//Clear color buffer
 	glClear( GL_COLOR_BUFFER_BIT );
-
+	
 	//Render quad
 	if( gRenderQuad )
 	{
 		glBegin( GL_QUADS );
-		glVertex2f( -0.5f, -0.5f );
-		glVertex2f( 0.5f, -0.5f );
-		glVertex2f( 0.5f, 0.5f );
-		glVertex2f( -0.5f, 0.5f );
+		glColor3f( 1.f, 0.f, 0.f ); glVertex2f( -0.5f, -0.5f );
+		glColor3f( 1.f, 1.f, 0.f ); glVertex2f( 0.5f, -0.5f );
+		glColor3f( 0.f, 1.f, 0.f ); glVertex2f( 0.5f, 0.5f );
+		glColor3f( 0.f, 0.f, 1.f ); glVertex2f( -0.5f, 0.5f );
+
 		glEnd();
 	}
 }
 
-//Frees media and shuts down SDL
 void close()
 {
 	//Destroy window	
@@ -189,10 +186,9 @@ void close()
 	SDL_Quit();
 }
 
-
 int main( int argc, char* args[] )
 {
-//Start up SDL and create window
+	//Start up SDL and create window
 	if( !init() )
 	{
 		printf( "Failed to initialize!\n" );

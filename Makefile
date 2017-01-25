@@ -1,27 +1,15 @@
-#Copyright Notice:
-#The files within this zip file are copyrighted by Lazy Foo' Productions (2004-2014)
-#and may not be redistributed without written permission.
-
 #OBJS specifies which files to compile as part of the project
-OBJS = main2.cpp
-#OBJS = 01_hello_SDL.cpp
+OBJS = app.cpp
 
 #CC specifies which compiler we're using
 CC = g++
-#CC = clang
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
-#COMPILER_FLAGS = -w
-#COMPILER_FLAGS = -v
+COMPILER_FLAGS = -w
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = `sdl2-config --cflags --libs` -lSDL2 -lGLU -lGL
-
-OS := $(shell uname)
-ifeq "$(OS)" "Darwin"
-LINKER_FLAGS = -lSDL2 -framework OpenGL
-endif
+LINKER_FLAGS = -lSDL2 -lGL -lGLU
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = app
