@@ -9,8 +9,8 @@ and may not be redistributed without written permission.*/
 #include <string>
 
 //Screen dimension constants
-int SCREEN_WIDTH = 640;
-int SCREEN_HEIGHT = 480;
+int SCREEN_WIDTH = 320;
+int SCREEN_HEIGHT = 320;
 
 //Starts up SDL, creates window, and initializes OpenGL
 bool init();
@@ -65,7 +65,8 @@ SDL_ShowCursor(SDL_DISABLE);
 
 
 		//Create window
-		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN );
+gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN );
+//gWindow = SDL_CreateWindow( "SDL Tutorial", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS );
 		if( gWindow == NULL )
 		{
 			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
