@@ -5,6 +5,7 @@ and may not be redistributed without written permission.*/
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <GL/glu.h>
+#include <SOIL/SOIL.h>
 #include <stdio.h>
 #include <string>
 
@@ -38,6 +39,9 @@ SDL_GLContext gContext;
 
 //Render flag
 bool gRenderQuad = true;
+
+
+GLuint tex_2d;
 
 bool init()
 {
@@ -141,6 +145,20 @@ bool initGL()
 		printf( "Error initializing OpenGL! %s\n", gluErrorString( error ) );
 		success = false;
 	}
+
+tex_2d = SOIL_load_OGL_texture
+    (
+        "hello.bmp",
+        SOIL_LOAD_AUTO,
+        SOIL_CREATE_NEW_ID,
+        SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT
+        );
+
+if (0 == tex_2d)
+{
+    printf("SOIL loading error: '%s'\n", SOIL_last_result());
+}
+glBindTexture(GL_TEXTURE_2D, tex_2d);
 	
 	return success;
 }
@@ -168,6 +186,13 @@ void render()
 	if( gRenderQuad )
 	{
 		glBegin( GL_QUADS );
+/*
+glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
+glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
+glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
+glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
+*/
+
 		glColor3f( 1.f, 0.f, 0.f ); glVertex2f( -0.5f, -0.5f );
 		glColor3f( 1.f, 1.f, 0.f ); glVertex2f( 0.5f, -0.5f );
 		glColor3f( 0.f, 1.f, 0.f ); glVertex2f( 0.5f, 0.5f );
