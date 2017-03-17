@@ -11,6 +11,7 @@ OpenGL 3 is a departure from previous versions, including WebGL, so we'll focus 
 
 ###Raspberry Pi
 * TBD
+* `export DISPLAY=:0.0`
 
 ##Dev Instrucitons
 * Modify app.cpp
